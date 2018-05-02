@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Net;
 
 namespace chktr
 {
@@ -27,7 +28,7 @@ namespace chktr
             services.AddDistributedRedisCache(options =>
             {
                 options.InstanceName = Configuration.GetValue<string>("redis:name");
-                options.Configuration = Configuration.GetValue<string>("redis:host");
+                options.Configuration = Dns.GetHostAddressesAsync(Configuration.GetValue<string>("redis:hostname")).Result.FirstOrDefault().ToString();
             });
 
             services.AddMvc();
@@ -35,18 +36,18 @@ namespace chktr
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info
+                {
+                    Version = "v1",
+                    Title = "Checkout Cart API",
+                    Description = "A simple Cart API",
+                    TermsOfService = "None",
+                    Contact = new Contact
                     {
-                        Version = "v1",
-                        Title = "Checkout Cart API",
-                        Description = "A simple Cart API",
-                        TermsOfService = "None",
-                        Contact = new Contact
-                        {
-                            Name = "Fernando Callejon",
-                            Email = "fcallejon@gmail.com",
-                            Url = "https://www.github.com/fcallejon"
-                        }
-                    });
+                        Name = "Fernando Callejon",
+                        Email = "fcallejon@gmail.com",
+                        Url = "https://www.github.com/fcallejon"
+                    }
+                });
             });
         }
 
@@ -56,7 +57,7 @@ namespace chktr
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
