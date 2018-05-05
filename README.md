@@ -18,10 +18,6 @@ After downloading the code run `.\up.ps1` from a powershell console.
 This is the cart service that a client (yet to be done) will use to handle whatever their customers want to buy.
 This project will not take care of the payment process.
 
-### STS
-
-_I'll probably remove it in the next push, don't get too fond of it._
-
 ### Client (chktr-client... **yet-to-be-done**)
 
 This will be an assembly that anyone can use to easily access the chktr-api API.
