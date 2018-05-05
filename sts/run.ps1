@@ -1,1 +1,0 @@
-$env:ASPNETCORE_URLS="http://*:5001" ; dotnet run --project .\sts\sts.csproj

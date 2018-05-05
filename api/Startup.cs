@@ -44,7 +44,7 @@ namespace chktr
             services.AddDistributedRedisCache(options =>
             {
                 options.InstanceName = Configuration.GetValue<string>("redis:name");
-                options.Configuration = Dns.GetHostAddressesAsync(Configuration.GetValue<string>("redis:hostname")).Result.FirstOrDefault().ToString();
+                options.Configuration = Configuration.GetValue<string>("redis:hostname");
             });
 
             services.AddMvc(o =>
@@ -86,10 +86,7 @@ namespace chktr
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            app.UseExceptionHandler();
 
             app.UseAuthentication();
 

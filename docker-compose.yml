@@ -10,15 +10,6 @@ services:
             - "./api/appsettings.Production.json:/app/appsettings.Production.json"
             - "./tmp/DataProtection:/app/DataProtection"
 
-    sts:
-        image: chksts
-        environment:
-            - ASPNETCORE_ENVIRONMENT=Production
-            - ASPNETCORE_URLS=http://*:5001
-        volumes:
-            - "./api/appsettings.Production.json:/app/appsettings.Production.json"
-            - "./tmp/DataProtection:/app/DataProtection"
-
     redis:  
         image: redis
         volumes: 
@@ -33,4 +24,3 @@ services:
         ports:
             - "8080:8080"
             - "8181:8181"
-            - "5001:5001"
