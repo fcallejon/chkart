@@ -1,0 +1,1 @@
+$env:ASPNETCORE_URLS="http://*:5000"; $env:ASPNETCORE_ENVIRONMENT="Development" ; dotnet run --project .\api\chktr.csproj

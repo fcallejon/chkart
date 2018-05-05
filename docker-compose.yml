@@ -3,12 +3,26 @@ version: '2'
 services:
 
     webapi:
-        image: chktr
+        image: chktr:latest
         environment:
             - ASPNETCORE_ENVIRONMENT=Production
+        volumes: 
+            - "./api/appsettings.Production.json:/app/appsettings.Production.json"
+            - "./tmp/DataProtection:/app/DataProtection"
+
+    sts:
+        image: chksts
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Production
+            - ASPNETCORE_URLS=http://*:5001
+        volumes:
+            - "./api/appsettings.Production.json:/app/appsettings.Production.json"
+            - "./tmp/DataProtection:/app/DataProtection"
 
     redis:  
         image: redis
+        volumes: 
+            - ./tmp/redis_data:/data
         ports:
             - "6379:6379"
 
@@ -17,4 +31,6 @@ services:
         volumes:
             - "./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg"
         ports:
-            - "8181:8080"
+            - "8080:8080"
+            - "8181:8181"
+            - "5001:5001"
