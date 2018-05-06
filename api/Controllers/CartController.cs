@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using chktr.Filters;
 using chktr.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +38,8 @@ namespace chktr.Controllers
             try
             {
                 var cart = await _cache.GetStringAsync(key.ToString());
-                if (cart == null){
+                if (cart == null)
+                {
                     return NotFound();
                 }
                 return Ok(cart.To<Cart>());
@@ -54,35 +57,54 @@ namespace chktr.Controllers
         /// <returns>The cart key.</returns>
         [HttpPost]
         [Produces(typeof(string))]
-        [SwaggerResponse(404)]
+        [SwaggerResponse((int)HttpStatusCode.BadRequest, description: "Any Model Validation Error")]
+        [SwaggerResponse((int)HttpStatusCode.InternalServerError, description: "Any DB related error")]
         public async Task<IActionResult> Post([FromBody]Cart newCart)
         {
-            var key = Guid.NewGuid().ToString();
-            await _cache.SetStringAsync(key,
-                JsonConvert.SerializeObject(newCart),
-                new DistributedCacheEntryOptions
+            try
+            {
+                if (newCart == null)
                 {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1)
-                });
-            return Ok(key);
+                    return BadRequest("Missing Body");
+                }
+
+                var key = Guid.NewGuid().ToString();
+                await _cache.SetStringAsync(key,
+                    JsonConvert.SerializeObject(newCart),
+                    new DistributedCacheEntryOptions
+                    {
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1)
+                    });
+
+                return Ok(key);
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+            }
         }
 
         /// <summary>
         /// Update a Cart
         /// </summary>
         /// <param name="key">The element Key</param>
-        /// <param name="newCart">The new <see cref="Cart" /></param>
+        /// <param name="newDataCart">The new <see cref="Cart" /></param>
         /// <returns>The new cart key.</returns>
         [HttpPut("{key:Guid}")]
         [SwaggerResponse(404)]
         [SwaggerResponse(400)]
-        public async Task<IActionResult> Put(Guid key, [FromBody]Cart newCart)
+        public async Task<IActionResult> Put(Guid key, [FromBody]Cart newDataCart)
         {
             try
             {
+                if (newDataCart == null)
+                {
+                    return BadRequest("Missing Body");
+                }
                 await _cache.RemoveAsync(key.ToString());
                 await _cache.SetStringAsync(key.ToString(),
-                    JsonConvert.SerializeObject(newCart),
+                    JsonConvert.SerializeObject(newDataCart),
                     new DistributedCacheEntryOptions
                     {
                         AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1)
@@ -106,11 +128,13 @@ namespace chktr.Controllers
         [SwaggerResponse(500, description: "In case something unexpected happens at DB level.")]
         public async Task<IActionResult> Delete(Guid key)
         {
-            try{
-            await _cache.RemoveAsync(key.ToString());
-            return Ok();
+            try
+            {
+                await _cache.RemoveAsync(key.ToString());
+                return Ok();
             }
-            catch(Exception ex){
+            catch (Exception ex)
+            {
                 return StatusCode(500, ex.Message);
             }
         }

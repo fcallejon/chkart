@@ -1,4 +1,6 @@
 ﻿using System;
+using chktr.Model;
+using chktr.Client;
 
 namespace test_console
 {
@@ -6,9 +8,29 @@ namespace test_console
     {
         static void Main(string[] args)
         {
-            var client = new chktr.Client.ChktrClient("test", "A-KEY-GNERATED-BY-A-KEY-MANAGEMENT-SYSTEM");
-            var cart = client.GetCart(new Guid("962b203d-c005-4ef9-ac8b-9e7b26f9216e")).Result;
-            Console.WriteLine($"Got Cart: {cart != null}");
+            using (var client = new ChktrClient("test", "A-KEY-GNERATED-BY-A-KEY-MANAGEMENT-SYSTEM"))
+            {
+                try
+                {
+                    var cartId = client.Create(new Cart
+                    {
+                        Firstname = "First Test Name",
+                        Lastname = "Last Test Name",
+                        Items = new[] {
+                        new CartItem {
+                            Description = "Prod Test 1",
+                            Quantity = 4,
+                            UnitPrice = 7
+                        }
+                    }
+                    }).Result;
+                    Console.WriteLine($"Created new Cart: {cartId.ToString()}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
         }
     }
 }

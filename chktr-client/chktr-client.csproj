@@ -3,9 +3,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="RestSharp" Version="106.2.2" />
+    <PackageReference Include="RestSharp" Version="106.2.2"/>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2"/>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\chktr-model\chktr-model.csproj" />
+    <ProjectReference Include="..\chktr-model\chktr-model.csproj"/>
   </ItemGroup>
 </Project>

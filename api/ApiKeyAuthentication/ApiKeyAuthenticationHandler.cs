@@ -24,12 +24,13 @@ namespace chktr.ApiKeyAuthentication
                 return Task.FromResult(AuthenticateResult.Fail("Missing authorization header."));
             }
 
-            if (authorization != "A-KEY-GNERATED-BY-A-KEY-MANAGEMENT-SYSTEM")
+            if (!Options.ApplicationsPerKey
+                        .Any(ka => $"{ka.Value}:{ka.Key}".Equals(authorization)))
             {
                 return Task.FromResult(AuthenticateResult.Fail("Invalid Key."));
             }
 
-            var identities = new List<ClaimsIdentity> {new ClaimsIdentity(Options.Scheme)};      
+            var identities = new List<ClaimsIdentity> { new ClaimsIdentity(Options.Scheme) };
             var authTicket = new AuthenticationTicket(new ClaimsPrincipal(identities), Options.Scheme);
             return Task.FromResult(AuthenticateResult.Success(authTicket));
         }

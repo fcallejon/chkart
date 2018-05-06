@@ -16,6 +16,7 @@ using System.IO;
 using chktr.ApiKeyAuthentication;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Authorization;
+using chktr.Filters;
 
 namespace chktr
 {
@@ -35,7 +36,10 @@ namespace chktr
                       o.DefaultAuthenticateScheme = ApiKeyAuthenticationOptions.DefaultScheme;
                       o.DefaultChallengeScheme = ApiKeyAuthenticationOptions.DefaultScheme;
                   })
-                  .AddApiKeyAuth(o => {});
+                  .AddApiKeyAuth(o => {
+                      o.TryAddApplicationKey("test", "A-KEY-GNERATED-BY-A-KEY-MANAGEMENT-SYSTEM");
+                      o.TryAddApplicationKey("anotherApp", "ANOTHER-KEY-GNERATED-BY-A-KEY-MANAGEMENT-SYSTEM");
+                  });
 
             var dataProectionFolder = new DirectoryInfo(Configuration.GetValue<string>("dataProtection:folder"));
             services.AddDataProtection()
@@ -49,6 +53,7 @@ namespace chktr
 
             services.AddMvc(o =>
             {
+                o.Filters.Add(new ValidateModelFilterAttribute());
                 o.Filters.Add(new AuthorizeFilter(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build()));
             });
 
