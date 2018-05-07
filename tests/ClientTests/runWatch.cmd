@@ -1,0 +1,1 @@
+dotnet watch --project .\ClientTests.csproj test /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=./coverage/lcov

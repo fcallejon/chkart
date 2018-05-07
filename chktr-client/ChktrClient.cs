@@ -6,7 +6,7 @@ using System.Net;
 using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
 
-[assembly: InternalsVisibleTo("chktr.Tests")]
+[assembly: InternalsVisibleTo("ClientTests")]
 
 namespace chktr.Client
 {
@@ -115,6 +115,11 @@ namespace chktr.Client
         /// <exception cref="ApplicationException">In case server response is 500 or there is any other communication issues.</exception>
         public async Task<Cart> Get(Guid cartId)
         {
+            if (cartId == Guid.Empty)
+            {
+                throw new ArgumentException($"'{nameof(cartId)}' should have a value", nameof(cartId));
+            }
+
             var request = new RestRequest(CartIdUriPath, Method.GET);
             request.AddUrlSegment("cartId", cartId);
             IRestResponse<Cart> response = null;
@@ -128,9 +133,9 @@ namespace chktr.Client
                 }
                 return response.Data;
             }
-            catch
+            catch (Exception ex)
             {
-                throw CreateException(response);
+                throw CreateException(response, ex);
             }
         }
 
@@ -143,6 +148,16 @@ namespace chktr.Client
         /// <exception cref="ApplicationException">In case server response is 500 or there is any other communication issues.</exception>
         public async Task<bool> Update(Guid cartId, Cart data)
         {
+            if (cartId == Guid.Empty)
+            {
+                throw new ArgumentException($"'{nameof(cartId)}' should have a value", nameof(cartId));
+            }
+
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
             var request = new RestRequest(CartIdUriPath, Method.PUT);
             request.AddUrlSegment("cartId", cartId);
             request.RequestFormat = DataFormat.Json;
@@ -150,17 +165,21 @@ namespace chktr.Client
             IRestResponse<Cart> response = null;
             try
             {
-                response = await _client.ExecuteGetTaskAsync<Cart>(request);
+                response = await _client.ExecuteTaskAsync<Cart>(request);
 
                 if (response.StatusCode == HttpStatusCode.NotFound)
                 {
                     return false;
                 }
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    throw response.ErrorException ?? new Exception();
+                }
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
-                throw CreateException(response);
+                throw CreateException(response, ex);
             }
         }
 
@@ -172,11 +191,16 @@ namespace chktr.Client
         /// <exception cref="ApplicationException">In case server response is 500 or there is any other communication issues.</exception>
         public async Task<bool> Delete(Guid cartId)
         {
+            if (cartId == Guid.Empty)
+            {
+                throw new ArgumentException($"'{nameof(cartId)}' should have a value", nameof(cartId));
+            }
+
             var request = new RestRequest(CartIdUriPath, Method.DELETE);
             IRestResponse<bool> response = null;
             try
             {
-                response = await _client.ExecuteGetTaskAsync<bool>(request);
+                response = await _client.ExecuteTaskAsync<bool>(request);
 
                 if (response.StatusCode == HttpStatusCode.NotFound)
                 {
@@ -184,9 +208,9 @@ namespace chktr.Client
                 }
                 return response.Data;
             }
-            catch
+            catch (Exception ex)
             {
-                throw CreateException(response);
+                throw CreateException(response, ex);
             }
         }
 
@@ -198,6 +222,11 @@ namespace chktr.Client
         /// <exception cref="ApplicationException">In case server response is 500 or there is any other communication issues.</exception>
         public async Task<Guid> Create(Cart data)
         {
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
             var request = new RestRequest(CartPostUriPath, Method.POST);
             request.RequestFormat = DataFormat.Json;
             request.AddJsonBody(data);
@@ -208,13 +237,13 @@ namespace chktr.Client
                 response = await _client.ExecutePostTaskAsync<Guid>(request);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    throw new Exception();
+                    throw response.ErrorException ?? new Exception();
                 }
                 return response.Data;
             }
-            catch
+            catch (Exception ex)
             {
-                throw CreateException(response);
+                throw CreateException(response, ex);
             }
         }
 
@@ -240,8 +269,12 @@ namespace chktr.Client
             }
         }
 
-        private ApplicationException CreateException(IRestResponse response)
+        private Exception CreateException(IRestResponse response, Exception catchedException)
         {
+            if (response == null)
+            {
+                return catchedException;
+            }
             return new ApplicationException(
                     $"{response.StatusDescription} {Environment.NewLine} {response.Content}",
                     response.ErrorException);

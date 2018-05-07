@@ -1,0 +1,208 @@
+SF:C:\temp\chktr\chktr-client\ChktrClient.cs
+FN:41,System.String chktr.Client.ChktrClient::get_ApplicationName()
+FNDA:9,System.String chktr.Client.ChktrClient::get_ApplicationName()
+DA:42,9
+FN:47,System.String chktr.Client.ChktrClient::get_ApplicationKey()
+FNDA:9,System.String chktr.Client.ChktrClient::get_ApplicationKey()
+DA:48,9
+FN:62,System.Void chktr.Client.ChktrClient::.ctor(System.String,System.String)
+FNDA:0,System.Void chktr.Client.ChktrClient::.ctor(System.String,System.String)
+DA:63,0
+DA:64,0
+DA:65,0
+FN:73,System.Void chktr.Client.ChktrClient::.ctor(System.String,System.String,System.String)
+FNDA:4,System.Void chktr.Client.ChktrClient::.ctor(System.String,System.String,System.String)
+DA:74,4
+DA:75,0
+DA:76,0
+FN:52,System.Void chktr.Client.ChktrClient::.ctor(System.String,System.String,System.String,RestSharp.IRestClient)
+FNDA:13,System.Void chktr.Client.ChktrClient::.ctor(System.String,System.String,System.String,RestSharp.IRestClient)
+DA:53,13
+DA:78,13
+DA:79,13
+DA:80,13
+DA:81,1
+DA:82,1
+DA:85,12
+BRDA:85,1,1,12
+DA:86,1
+DA:87,1
+DA:90,11
+BRDA:90,2,2,11
+DA:91,1
+DA:92,1
+DA:95,10
+BRDA:95,3,3,10
+DA:96,1
+DA:97,1
+DA:100,9
+BRDA:100,4,4,9
+DA:101,9
+DA:103,9
+DA:104,9
+DA:105,9
+DA:106,9
+DA:107,9
+DA:108,9
+FN:224,System.Void chktr.Client.ChktrClient::Dispose()
+FNDA:9,System.Void chktr.Client.ChktrClient::Dispose()
+DA:225,9
+DA:226,9
+DA:227,9
+DA:228,9
+FN:230,System.Void chktr.Client.ChktrClient::Dispose(System.Boolean)
+FNDA:13,System.Void chktr.Client.ChktrClient::Dispose(System.Boolean)
+DA:231,13
+DA:232,13
+DA:233,9
+DA:235,9
+DA:236,9
+DA:237,9
+DA:238,9
+DA:239,9
+BRDA:239,5,5,9
+DA:240,9
+DA:241,13
+BRDA:241,6,6,13
+FN:243,System.Exception chktr.Client.ChktrClient::CreateException(RestSharp.IRestResponse,System.Exception)
+FNDA:5,System.Exception chktr.Client.ChktrClient::CreateException(RestSharp.IRestResponse,System.Exception)
+DA:244,5
+DA:245,5
+DA:246,3
+DA:247,3
+DA:249,2
+BRDA:249,7,7,2
+DA:250,2
+DA:251,2
+DA:252,5
+BRDA:252,8,8,5
+FN:254,System.Void chktr.Client.ChktrClient::Finalize()
+FNDA:8,System.Void chktr.Client.ChktrClient::Finalize()
+DA:255,8
+DA:256,4
+DA:257,8
+BRDA:257,9,9,8
+FN:116,System.Void chktr.Client.ChktrClient/<Get>d__17::MoveNext()
+FNDA:3,System.Void chktr.Client.ChktrClient/<Get>d__17::MoveNext()
+DA:117,3
+BRDA:117,10,10,3
+DA:118,3
+DA:119,3
+DA:120,3
+DA:122,3
+BRDA:122,11,11,3
+DA:123,3
+DA:125,2
+DA:126,1
+DA:127,1
+DA:129,0
+DA:131,2
+DA:132,2
+DA:133,2
+DA:135,1
+BRDA:135,12,12,1
+FN:144,System.Void chktr.Client.ChktrClient/<Update>d__18::MoveNext()
+FNDA:0,System.Void chktr.Client.ChktrClient/<Update>d__18::MoveNext()
+DA:145,0
+DA:146,0
+DA:147,0
+DA:148,0
+DA:149,0
+DA:150,0
+DA:152,0
+DA:153,0
+DA:155,0
+DA:156,0
+DA:157,0
+DA:159,0
+DA:161,0
+DA:162,0
+DA:163,0
+DA:165,0
+FN:173,System.Void chktr.Client.ChktrClient/<Delete>d__19::MoveNext()
+FNDA:3,System.Void chktr.Client.ChktrClient/<Delete>d__19::MoveNext()
+DA:174,3
+BRDA:174,13,13,3
+DA:175,3
+DA:176,3
+DA:178,3
+BRDA:178,14,14,3
+DA:179,3
+DA:181,2
+DA:182,1
+DA:183,1
+DA:185,1
+BRDA:185,15,15,1
+DA:187,1
+DA:188,1
+DA:189,1
+DA:191,2
+BRDA:191,16,16,2
+FN:199,System.Void chktr.Client.ChktrClient/<Create>d__20::MoveNext()
+FNDA:3,System.Void chktr.Client.ChktrClient/<Create>d__20::MoveNext()
+DA:200,3
+BRDA:200,17,17,3
+DA:201,3
+DA:202,3
+DA:203,3
+DA:204,3
+DA:207,3
+BRDA:207,18,18,3
+DA:208,3
+DA:209,3
+DA:210,2
+DA:211,2
+DA:213,1
+BRDA:213,19,19,1
+DA:215,2
+DA:216,2
+DA:217,2
+DA:219,1
+BRDA:219,20,20,1
+LH:92
+LF:114
+BRF:20
+BRH:20
+FNF:13
+FNH:12
+end_of_record
+SF:C:\temp\chktr\chktr-model\Cart.cs
+FN:11,System.String chktr.Model.Cart::get_Firstname()
+FNDA:8,System.String chktr.Model.Cart::get_Firstname()
+DA:12,8
+FN:16,System.String chktr.Model.Cart::get_Lastname()
+FNDA:6,System.String chktr.Model.Cart::get_Lastname()
+DA:17,6
+FN:18,System.Collections.Generic.IEnumerable`1<chktr.Model.CartItem> chktr.Model.Cart::get_Items()
+FNDA:9,System.Collections.Generic.IEnumerable`1<chktr.Model.CartItem> chktr.Model.Cart::get_Items()
+DA:19,9
+FN:20,System.Nullable`1<System.Double> chktr.Model.Cart::get_Total()
+FNDA:4,System.Nullable`1<System.Double> chktr.Model.Cart::get_Total()
+DA:21,4
+LH:96
+LF:118
+BRF:20
+BRH:20
+FNF:17
+FNH:16
+end_of_record
+SF:C:\temp\chktr\chktr-model\CartItem.cs
+FN:9,System.String chktr.Model.CartItem::get_Description()
+FNDA:6,System.String chktr.Model.CartItem::get_Description()
+DA:10,6
+FN:13,System.Int32 chktr.Model.CartItem::get_Quantity()
+FNDA:10,System.Int32 chktr.Model.CartItem::get_Quantity()
+DA:14,10
+FN:17,System.Double chktr.Model.CartItem::get_UnitPrice()
+FNDA:10,System.Double chktr.Model.CartItem::get_UnitPrice()
+DA:18,10
+FN:19,System.Double chktr.Model.CartItem::get_Subtotal()
+FNDA:4,System.Double chktr.Model.CartItem::get_Subtotal()
+DA:20,4
+LH:100
+LF:122
+BRF:20
+BRH:20
+FNF:21
+FNH:20
+end_of_record
