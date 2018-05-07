@@ -33,12 +33,13 @@ namespace chktr.Controllers
         [Produces(typeof(Cart))]
         [SwaggerResponse(404)]
         [SwaggerResponse(400)]
+        [SwaggerResponse(500)]
         public async Task<IActionResult> Get(Guid key)
         {
             try
             {
                 var cart = await _cache.GetStringAsync(key.ToString());
-                if (cart == null)
+                if (string.IsNullOrEmpty(cart))
                 {
                     return NotFound();
                 }
@@ -46,7 +47,7 @@ namespace chktr.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 

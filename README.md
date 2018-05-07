@@ -48,13 +48,14 @@ An ApiKey will be handled to the dev that want to use this service and, by using
 
 ----------
 
-### TO-DO
+### What else can be done?
 
-- Define how to communicate with a Purchase Service
-- Add Unit Tests
-- Add a dashboard to generate the dev Key
-- Add small sample app using the client
-- Add E2E Test?
+- Fix Code Coverage to increate it up to 80%
+- Add a dashboard to generate the dev Key.
+- Add E2E Test.
+- Add an MVC sample App.
+- Rename same projects.
+- Add a new redis _subkey_ to separate Carts by client.
 
 ----------
 
