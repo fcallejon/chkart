@@ -17,11 +17,11 @@ namespace chktr.Controllers
     [Route("api/[controller]")]
     public class CartController : Controller
     {
-        private readonly IDistributedCache _cache;
+        private readonly CartService _service;
 
-        public CartController(IDistributedCache cache)
+        public CartController(CartService service)
         {
-            this._cache = cache;
+            _service = service;
         }
 
         /// <summary>
@@ -38,12 +38,12 @@ namespace chktr.Controllers
         {
             try
             {
-                var cart = await _cache.GetStringAsync(key.ToString());
-                if (string.IsNullOrEmpty(cart))
+                var cart = await _service.GetCart(key);
+                if (cart == null)
                 {
                     return NotFound();
                 }
-                return Ok(cart.To<Cart>());
+                return Ok(cart);
             }
             catch (Exception ex)
             {
@@ -69,20 +69,14 @@ namespace chktr.Controllers
                     return BadRequest("Missing Body");
                 }
 
-                var key = Guid.NewGuid().ToString();
-                await _cache.SetStringAsync(key,
-                    JsonConvert.SerializeObject(newCart),
-                    new DistributedCacheEntryOptions
-                    {
-                        AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1)
-                    });
+                var key = Guid.NewGuid();
+                await _service.Create(key, newCart);
 
                 return Ok(key);
             }
             catch (Exception ex)
             {
-                System.Console.WriteLine(ex.Message);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -103,18 +97,17 @@ namespace chktr.Controllers
                 {
                     return BadRequest("Missing Body");
                 }
-                await _cache.RemoveAsync(key.ToString());
-                await _cache.SetStringAsync(key.ToString(),
-                    JsonConvert.SerializeObject(newDataCart),
-                    new DistributedCacheEntryOptions
-                    {
-                        AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1)
-                    });
+                var cart = await _service.GetCart(key);
+                if (cart == null)
+                {
+                    return NotFound();
+                }
+                await _service.Update(key, newDataCart);
                 return Ok();
             }
             catch (Exception ex)
             {
-                return NotFound(ex.GetType().Name);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -131,7 +124,7 @@ namespace chktr.Controllers
         {
             try
             {
-                await _cache.RemoveAsync(key.ToString());
+                await _service.Delete(key);
                 return Ok();
             }
             catch (Exception ex)

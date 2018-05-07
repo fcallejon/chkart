@@ -56,6 +56,7 @@ namespace chktr
                 o.Filters.Add(new ValidateModelFilterAttribute());
                 o.Filters.Add(new AuthorizeFilter(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build()));
             });
+            services.AddScoped<CartService>();
 
             services.AddSwaggerGen(c =>
             {

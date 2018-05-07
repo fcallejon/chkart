@@ -16,7 +16,7 @@ namespace chktr.Model
         [MaxLength(50)]
         public string Lastname { get; set; }
 
-        public IEnumerable<CartItem> Items { get; set; }
+        public IList<CartItem> Items { get; set; }
 
         public double? Total => Items?.Sum(i => i.Subtotal);
     }

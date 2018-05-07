@@ -34,6 +34,16 @@ Then you can access the SwaggerUI at `http://localhost:5000`.
 This is the cart service that a client (yet to be done) will use to handle whatever their customers want to buy.
 This project will not take care of the payment process.
 
+#### Test
+
+You can find the test for it under `[root]\tests\ApiTests`.
+To Debug:
+1. run the task `debug api test proj` (from `CTRL+SHIFT+P` `>Tasks: Run task`).
+2. Switch to Debug Panel (`CTRL+SHIFT+D`) ad pick `debug-tests`
+3. Hit Play and pick the process id from step 1
+
+There is also a `runWatch.ps1` under `[root]\tests\ApiTests` scripts that you can run and see how tests get re-run after every change you save.
+
 ### Model (chktr-model)
 
 This will contain the shared model between the client and the API.
@@ -41,6 +51,16 @@ This will contain the shared model between the client and the API.
 ### Client (chktr-client)
 
 This will be an assembly that anyone can use to easily access the chktr-api API.
+
+#### Test
+
+You can find the test for it under `[root]\tests\ClientTests`.
+To Debug:
+1. run the task `debug client test proj` (from `CTRL+SHIFT+P` `>Tasks: Run task`).
+2. Switch to Debug Panel (`CTRL+SHIFT+D`) ad pick `debug-tests`
+3. Hit Play and pick the process id from step 1
+
+There is also a `runWatch.ps1` under `[root]\tests\ClientTests` scripts that you can run and see how tests get re-run after every change you save.
 
 ## How to use the chktr-api API
 
@@ -50,7 +70,9 @@ An ApiKey will be handled to the dev that want to use this service and, by using
 
 ### What else can be done?
 
+- Enhance Model (ie.: add an Key to CartItem)
 - Fix Code Coverage to increate it up to 80%
+- Add some UTs for CartService
 - Add a dashboard to generate the dev Key.
 - Add E2E Test.
 - Add an MVC sample App.

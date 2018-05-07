@@ -5,9 +5,9 @@ namespace chktr
 {
     public static class StringExtensions
     {
-        public static T To<T>(this string data)
+        public static T To<T>(this string data, T @default = default(T))
         {
-            return JsonConvert.DeserializeObject<T>(data);
+            return string.IsNullOrEmpty(data) ? @default : JsonConvert.DeserializeObject<T>(data);
         }
     }
 }

@@ -8,64 +8,70 @@ using System.Threading;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Text;
+using chktr;
 
 namespace ApiTests
 {
     [TestClass]
     public class CartControllerTests
     {
-        private CartController GetController()
+        private IDistributedCache _cache;
+
+        [TestInitialize]
+        public void Initialize()
         {
-            var mockedCache = new Mock<IDistributedCache>();
-            return new CartController(mockedCache.Object);
+            _cache = new Mock<IDistributedCache>().Object;
         }
-        
-        private CartController GetController(IDistributedCache cache)
+
+        [TestCleanup]
+        public void Cleanup()
         {
-            return new CartController(cache);
+            _cache = null;
         }
 
         [TestMethod]
         public void WhenGetCartThatExists_ShouldReturnValidInstance()
         {
             var cart = GetDummyCart();
-            var cartBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(cart));
 
-            var mockedCache = new Mock<IDistributedCache>();
-            mockedCache
-                .Setup(c => c.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(cartBytes);
+            var mockedService = new Mock<CartService>(_cache);
+            mockedService
+                .Setup(c => c.GetCart(It.IsAny<Guid>()))
+                .ReturnsAsync(cart);
 
-            var result = GetController(mockedCache.Object).Get(Guid.NewGuid()).GetAwaiter().GetResult();
+            var result = GetController(mockedService.Object).Get(Guid.NewGuid()).GetAwaiter().GetResult();
             Assert.IsInstanceOfType(result, typeof(OkObjectResult), "Should get the cart.");
         }
 
         [TestMethod]
         public void WhenGetCartThatDoNotExists_ShouldReturnNull()
         {
-            var mockedCache = new Mock<IDistributedCache>();
-            mockedCache
-                .Setup(c => c.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync((byte[])null);
+            var mockedService = new Mock<CartService>(_cache);
+            mockedService
+                .Setup(c => c.GetCart(It.IsAny<Guid>()))
+                .ReturnsAsync((Cart)null);
 
-            var controller = GetController(mockedCache.Object);
+            var controller = GetController(mockedService.Object);
             var cart = controller.Get(Guid.NewGuid()).GetAwaiter().GetResult();
             Assert.IsInstanceOfType(cart, typeof(NotFoundResult), "Should not get the cart.");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ApplicationException))]
-        public void WhenGetCartButServerThrows_ShouldThrowError()
+        public void WhenGetCartButServerThrows_ShouldReturn500()
         {
-            var mockedCache = new Mock<IDistributedCache>();
-            mockedCache
-                .Setup(c => c.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-                .ThrowsAsync(new Exception());
+            var mockedService = new Mock<CartService>(_cache);
+            mockedService
+                .Setup(c => c.GetCart(It.IsAny<Guid>()))
+                .ThrowsAsync(new Exception())
+                .Verifiable();
 
-            var controller = GetController(mockedCache.Object);
+            var controller = GetController(mockedService.Object);
             var result = controller.Get(Guid.NewGuid()).GetAwaiter().GetResult();
-            Assert.IsInstanceOfType(result, typeof(StatusCodeResult), "Should not get the cart.");
-            Assert.AreEqual(500, ((StatusCodeResult)result).StatusCode);
+
+            mockedService.VerifyAll();
+
+            Assert.IsInstanceOfType(result, typeof(ObjectResult), "Should not get the cart.");
+            Assert.AreEqual(500, ((ObjectResult)result).StatusCode);
         }
 
         private Cart GetDummyCart()
@@ -79,6 +85,11 @@ namespace ApiTests
                         new CartItem{Description= "item", Quantity=1, UnitPrice =2}
                     }
             };
+        }
+
+        private CartController GetController(CartService service)
+        {
+            return new CartController(service);
         }
     }
 }
