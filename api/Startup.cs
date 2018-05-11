@@ -67,7 +67,7 @@ namespace chktr
                     Type = "apiKey",
                     In = "header",
                     Name = "Authorization",
-                    Description = "Just write 'A-KEY-GNERATED-BY-A-KEY-MANAGEMENT-SYSTEM' in the Value field."
+                    Description = "Just write 'test:A-KEY-GNERATED-BY-A-KEY-MANAGEMENT-SYSTEM' in the Value field."
                 });
                 c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
                 {
